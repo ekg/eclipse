@@ -1,0 +1,11 @@
+# media (GBs) - never track
+*.mp4
+*.MP4
+*.mov
+*.trf
+*.npy
+
+# scratch
+**/__pycache__/
+2026_rillo/stab_test/
+*.log
