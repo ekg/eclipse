@@ -72,3 +72,21 @@ python3 verify_tl2.py eclipse_2026_timelapse10x_4k_v4.mp4
   round trips).
 - No clouds here → terrain = constant reference → terrain-band brightness is
   the camera's own gain: that's the AE wobble signal (and the repair anchor).
+
+## Google Photos upload (2026-09-07)
+- Google's 2025 API lockdown: new OAuth apps get append-only scopes (upload
+  works; album/list calls 403), so rclone's gphotos backend cannot upload
+  ("can't upload files here" on media/, albums unlistable). Use the raw
+  Library API instead: `tools/upload_photos.py` (refreshes the rclone token,
+  POSTs bytes to /v1/uploads, then mediaItems:batchCreate).
+- One-time OAuth: own GCP project + Photos Library API + Desktop client,
+  consent screen in Testing mode with your account as Test user;
+  `tools/oauth_catcher.py` catches the loopback redirect for the token
+  exchange. Written to rclone's gphotos remote config.
+- Deliverables stamped `creation_time=2026-08-12T18:25:55Z` (from DJI
+  container metadata, lossless -c copy remux) so Photos files them at
+  eclipse time, not upload time.
+- Effective resolution measured (round-trip PSNR through downscaled
+  intermediates): ~900-1080p detail despite the 3840x2160 container —
+  1080p CRF15 companion uploaded to Photos (visually identical, ~4x
+  smaller); 4K CRF16 master stays the local archive.
