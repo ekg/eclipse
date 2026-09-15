@@ -44,8 +44,8 @@ def upload(path):
     mbps = size / 1e6 / (time.time() - t0)
     print(f"  upload token obtained ({mbps:.1f} MB/s), creating media item ...", flush=True)
     body = json.dumps({"newMediaItems": [
-        {"simpleMediaItem": {"uploadToken": token},
-         "fileName": name}]})
+        {"description": "2026-08-12 total solar eclipse - stabilized",
+         "simpleMediaItem": {"uploadToken": token, "fileName": name}}]})
     p = subprocess.run(["curl", "-s", "-X", "POST",
                         "https://photoslibrary.googleapis.com/v1/mediaItems:batchCreate",
                         "-H", f"Authorization: Bearer {TOK}",

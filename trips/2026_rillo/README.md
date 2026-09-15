@@ -90,3 +90,12 @@ python3 verify_tl2.py eclipse_2026_timelapse10x_4k_v4.mp4
   intermediates): ~900-1080p detail despite the 3840x2160 container —
   1080p CRF15 companion uploaded to Photos (visually identical, ~4x
   smaller); 4K CRF16 master stays the local archive.
+
+## 1080p companions (2026-09-15)
+Effective resolution measured at ~900-1080p (round-trip PSNR): 4K containers
+oversample the optical detail ~2x. 1080p CRF15/16 companions rendered for
+cloud/Photos (lanczos downscale, creation_time stamped): stabilized master
+915MB, timelapse 89MB (5x smaller than 4K, 40-43 dB vs 4K = visually
+transparent). 4K CRF16 files remain the local archive of record.
+NOTE: Google Photos Library API uploads endpoint hard-400s for unverified
+Testing-mode apps (post-2025 policy) -> manual upload; see tools/README.
