@@ -99,3 +99,19 @@ cloud/Photos (lanczos downscale, creation_time stamped): stabilized master
 transparent). 4K CRF16 files remain the local archive of record.
 NOTE: Google Photos Library API uploads endpoint hard-400s for unverified
 Testing-mode apps (post-2025 policy) -> manual upload; see tools/README.
+
+## Timelapse v5/v6 (2026-09-16) — corrections-never-applied bug found & fixed
+The v4-era timelapse corrections were silently NOT applied (escaped-comma
+parser bug, see tools/README #9) — it carried raw camera wander. v5/v6:
+- corrections rebuilt from the fused ECC trajectory with measurement
+  smoothing sigma 0.2s (was 1.0s) so wind oscillation is actually corrected;
+- filtergraph with raw commas (validated via static-input round trip:
+  content moves exactly by the correction trajectory);
+- luma_fix band widened to 0.4-15s display (AE residual peaked at 70-90s
+  real), gate dilation 30s; totality protected to +3.7 luma worst-case.
+- geometric lock verified sub-pixel at 1080p (consecutive-frame ECC dy
+  p95 ~1px @4K). Remaining apparent horizon motion is the sky's own
+  brightness redistribution during the eclipse (real physics).
+Deliverables: eclipse_2026_timelapse10x_1080p_v6.mp4 (canonical 1080p),
+tl_v5_fixed3.mp4 = 4K timelapse master (correct lock + luma fix).
+The v4-era timelapse files are superseded (broken corrections).

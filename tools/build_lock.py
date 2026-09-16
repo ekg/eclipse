@@ -18,6 +18,7 @@ traj_file = sys.argv[1]
 smooth_rot_s = float(sys.argv[2]) if len(sys.argv) > 2 else 0.8
 smooth_tr_s = float(sys.argv[3]) if len(sys.argv) > 3 else 45.0
 target_deg = float(sys.argv[4]) if len(sys.argv) > 4 else None
+meas_smooth_s = float(sys.argv[5]) if len(sys.argv) > 5 else 1.0
 
 W960, W4K = 960, 3840
 S = W4K / W960  # 4.0 scale factor for translations
@@ -42,8 +43,8 @@ ang_s = gsmooth(ang, smooth_rot_s)
 # translation: correction uses lightly-smoothed measurements (kills SIFT noise,
 # keeps real wander: slower-than-sigma wander becomes smooth motion, not jitter),
 # locked against the heavily-smoothed path
-tx_meas = gsmooth(tx, 1.0)
-ty_meas = gsmooth(ty, 1.0)
+tx_meas = gsmooth(tx, meas_smooth_s)
+ty_meas = gsmooth(ty, meas_smooth_s)
 tx_path = gsmooth(tx, smooth_tr_s)
 ty_path = gsmooth(ty, smooth_tr_s)
 
@@ -65,7 +66,7 @@ def build_expr(ts, vals, keep_every=1):
     terms = [f"{vals2[0]:.4f}"]
     for i in range(1, len(ts2)):
         dtv = ts2[i] - ts2[i - 1]
-        terms.append(f"({vals2[i] - vals2[i - 1]:+.4f})*clip((t-{ts2[i]:.3f})/{dtv:.3f}\\,0\\,1)")
+        terms.append(f"({vals2[i] - vals2[i - 1]:+.4f})*clip((t-{ts2[i]:.3f})/{dtv:.3f},0,1)")
     return "+".join(terms)
 
 for name, vals in [("corr_a.txt", a_corr), ("corr_x.txt", x_corr), ("corr_y.txt", y_corr)]:

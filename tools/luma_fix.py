@@ -33,11 +33,11 @@ terr = small[:, 70:, :].mean(axis=(1, 2))
 # band-stop (1.2-8s display) gated by sustained slope: AE wobble oscillates
 # (low sustained slope) -> corrected; eclipse transitions are sustained
 # monotone ramps -> gate disables correction there, preserving the drama
-band = (gaussian_filter1d(terr, 1.2 * 30, mode="reflect")
-        - gaussian_filter1d(terr, 8.0 * 30, mode="reflect"))
+band = (gaussian_filter1d(terr, 0.4 * 30, mode="reflect")
+        - gaussian_filter1d(terr, 15.0 * 30, mode="reflect"))
 slope = np.abs(np.gradient(gaussian_filter1d(terr, 4.0 * 30, mode="reflect")) * 30.0)  # luma per display-second
 w = 1.0 / (1.0 + (slope / 1.5) ** 2)          # 1 = flat, 0 = steep ramp
-w = 1.0 - maximum_filter1d(1.0 - w, 16 * 30)  # dilate: band memory is +/-8s
+w = 1.0 - maximum_filter1d(1.0 - w, 30 * 30)  # dilate: band memory is +/-15s
 gain = np.clip((terr - w * band) / np.maximum(terr, 1e-6), 0.78, 1.28)
 print(f"frames {n}, terrain luma med {np.median(terr):.1f}, "
       f"gain range {gain.min():.3f}..{gain.max():.3f} (std {gain.std():.4f})")

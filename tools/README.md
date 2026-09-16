@@ -67,3 +67,14 @@ the CWD. See the trip READMEs for exact end-to-end command sequences.
 8. Luminance: a plain trend-following deflicker destroys real eclipse
    dimming (AE wobble 37-73s cycles overlap the light-curve transitions);
    band-stop + slope gating is the safe compromise.
+9. THE BIG ONE: escaped commas (`\,`) inside quoted filter option values do
+   NOT parse in this build — the evaluator receives the backslash literally
+   ("Missing ')' or too many args"), and inside -filter_complex_script files
+   the failure mode is worse: the graph parser mis-associates option values
+   SILENTLY (overlay x/y corrections got cross-applied, clamped, and the
+   stabilization silently didn't happen). Use RAW commas inside quoted
+   expressions (quoting protects them from the graph parser). Always verify
+   correction application with a synthetic static-input run: feed a looped
+   still frame through the exact filtergraph and phase-correlate the output
+   against frame 0 — the content should move exactly by the correction
+   trajectory.
